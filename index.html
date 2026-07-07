@@ -12,11 +12,11 @@
 <meta property="og:url" content="https://pricemyweb.com/">
 <meta property="og:title" content="Price My Web — What's your website design worth?">
 <meta property="og:description" content="Grade any website design and get a fair, market-based project price. Free appraisal plus a shareable certificate.">
-<meta property="og:image" content="https://pricemyweb.com/preview.png">
+<meta property="og:image" content="https://pricemyweb.pages.dev/preview.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Price My Web — What's your website design worth?">
 <meta name="twitter:description" content="Grade any website design and get a fair, market-based project price. Free.">
-<meta name="twitter:image" content="https://pricemyweb.com/preview.png">
+<meta name="twitter:image" content="https://pricemyweb.pages.dev/preview.png">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"PriceMyWeb","url":"https://pricemyweb.com/","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Person","name":"Tasin Abrar"},"description":"Website design value and cost calculator that grades design, functionality and scope and returns a fair, market-based project price."}
 </script>
@@ -43,10 +43,23 @@
 
   header.top{position:sticky;top:0;z-index:20;background:rgba(239,236,228,.86);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
   .top-inner{display:flex;align-items:center;justify-content:space-between;height:60px}
-  .brand{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk';font-weight:700;font-size:17px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk';font-weight:700;font-size:17px;text-decoration:none;color:var(--text);cursor:pointer}
+  .top-right{display:flex;align-items:center;gap:14px}
+  .theme-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line-strong);background:var(--card);color:var(--gold);display:grid;place-items:center;cursor:pointer;padding:0;transition:all .15s}
+  .theme-btn:hover{border-color:var(--gold);transform:translateY(-1px)}
+  .theme-btn svg{width:17px;height:17px}
   .brand .seal{width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--gold-bright);display:grid;place-items:center;font-size:12px;font-weight:700;border:1.5px solid var(--gold)}
   .brand .q{color:var(--gold)}
   .steplabel{font-size:12.5px;color:var(--muted);font-family:'JetBrains Mono'}
+  .contact-link{text-decoration:none;transition:color .15s;display:inline-flex;align-items:center;gap:8px}
+  .contact-link:hover{color:var(--gold)}
+  .dev-ava{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid var(--gold);display:block}
+  .counter-card{text-align:left}
+  .counter-card .live{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono';font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#9c9787}
+  .counter-card .live .dot{width:8px;height:8px;border-radius:50%;background:#4ad17a;box-shadow:0 0 0 0 rgba(74,209,122,.6);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(74,209,122,.55)}70%{box-shadow:0 0 0 9px rgba(74,209,122,0)}100%{box-shadow:0 0 0 0 rgba(74,209,122,0)}}
+  .counter-num{font-family:'JetBrains Mono';font-weight:700;font-size:52px;color:var(--gold-bright);line-height:1;margin:8px 0 2px}
+  .shared-banner{background:var(--teal-soft);border:1px solid #bcd8d4;color:#0f4f4b;border-radius:12px;padding:12px 16px;font-size:14px;margin:0 0 18px;text-align:center}
   .progress{height:3px;background:var(--line);position:relative;overflow:hidden}
   .progress .fill{position:absolute;inset:0 auto 0 0;width:0;background:var(--gold);transition:width .4s cubic-bezier(.4,0,.2,1)}
 
@@ -89,8 +102,9 @@
   .field{margin-bottom:22px}
   .field > label{display:block;font-weight:600;font-size:14.5px;margin-bottom:8px}
   .field .hint{font-weight:400;color:var(--muted);font-size:13px}
-  input[type=text],input[type=url],input[type=number],select{width:100%;padding:14px 15px;border:1.5px solid var(--line-strong);border-radius:11px;background:var(--card);font-size:15.5px;font-family:inherit;color:var(--text);transition:border .15s, box-shadow .15s}
-  input:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(198,154,62,.18)}
+  input[type=text],input[type=url],input[type=number],select,textarea{width:100%;padding:14px 15px;border:1.5px solid var(--line-strong);border-radius:11px;background:var(--card);font-size:15.5px;font-family:inherit;color:var(--text);transition:border .15s, box-shadow .15s}
+  textarea{resize:vertical;line-height:1.5}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(198,154,62,.18)}
 
   .opts{display:flex;flex-wrap:wrap;gap:10px}
   .chip{border:1.5px solid var(--line-strong);background:var(--card);border-radius:11px;padding:12px 15px;font-size:14.5px;font-weight:500;color:var(--text);transition:all .14s;display:inline-flex;align-items:center;gap:8px}
@@ -131,6 +145,7 @@
   .price-tag .range{font-family:'JetBrains Mono';font-size:12.5px;color:#b9b4a6;margin-top:6px;text-align:right}
   .tag-caption{text-align:center;color:var(--muted);font-size:14px;max-width:46ch;margin:14px auto 0}
   .tag-caption b{color:var(--text)}
+  .result-note{text-align:center;color:var(--muted);font-size:12.5px;max-width:44ch;margin:10px auto 0;font-style:italic;opacity:.9}
 
   .markets-title{text-align:center;font-family:'Space Grotesk';font-weight:600;font-size:15px;color:var(--muted);margin:24px 0 12px}
   .markets{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:6px}
@@ -154,6 +169,9 @@
   .meter i{display:block;height:100%;width:0;background:var(--teal);border-radius:99px;transition:width 1s cubic-bezier(.4,0,.2,1)}
   .grade{display:inline-block;margin-top:20px;text-align:center;width:100%}
   .grade .g{font-family:'Space Grotesk';font-weight:700;font-size:15px}
+  .palette{display:flex;gap:8px;justify-content:center;margin:16px 0 4px;flex-wrap:wrap}
+  .palette .sw{width:38px;height:38px;border-radius:9px;border:1px solid rgba(0,0,0,.08);box-shadow:0 2px 6px -2px rgba(0,0,0,.25)}
+  .design-src{text-align:center;color:var(--muted);font-size:12.5px;margin:8px auto 0;max-width:46ch}
 
   .breakdown{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 18px;margin:24px 0}
   .brow{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px;gap:12px}
@@ -181,14 +199,30 @@
 
   @media(max-width:560px){.scores{grid-template-columns:1fr}.hero-card .strip{gap:16px}}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+  /* ---------- dark mode ---------- */
+  [data-theme="dark"]{
+    --ink:#20242c; --ink-soft:#2a2f38; --paper:#131519; --card:#1b1e24;
+    --line:#2b303a; --line-strong:#3b414d; --muted:#9b9a8f; --text:#e9e7df;
+    --gold:#d9a94a; --gold-bright:#ecc063; --gold-ink:#2a2109;
+    --teal:#4fb8b0; --teal-soft:#15302d;
+  }
+  [data-theme="dark"] header.top{background:rgba(19,21,25,.86)}
+  [data-theme="dark"] .mrow.primary{background:#241f12}
+  [data-theme="dark"] .mrow.primary .c{color:var(--gold-bright)}
+  [data-theme="dark"] .ai-note,[data-theme="dark"] .shared-banner{border-color:#26514c;color:#c3e7e2}
+  [data-theme="dark"] .sw{border-color:rgba(255,255,255,.12)}
 </style>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap top-inner">
-    <div class="brand"><span class="seal">$</span>Price<span class="q">MyWeb</span></div>
-    <div class="steplabel" id="steplabel">Appraisal desk</div>
+    <a class="brand" href="./" onclick="restart();return false;"><span class="seal">$</span>Price<span class="q">MyWeb</span></a>
+    <div class="top-right">
+      <button id="themeToggle" class="theme-btn" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle light or dark mode"></button>
+      <a class="steplabel contact-link" href="mailto:tasinabrar01@gmail.com"><img class="dev-ava" src="data:image/webp;base64,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" alt="Tasin Abrar" />Contact the developer</a>
+    </div>
   </div>
   <div class="progress"><div class="fill" id="pfill"></div></div>
 </header>
@@ -199,22 +233,16 @@
   <section class="screen active" id="s-intro">
     <div class="hero">
       <p class="eyebrow">Website-design appraisal</p>
-      <h1>What's the <span class="price"><span class="tag-emph">price</span></span> of a website design?</h1>
+      <h1>Calculate your <span class="price"><span class="tag-emph">website</span></span> design price</h1>
       <p class="lead">Bring in a site you designed. We grade the design, functionality and scope, then price it as a real project — for the market where <em>you</em> built it.</p>
       <div class="row">
-        <button class="btn gold" onclick="go(1)">Appraise a design <span class="arrow">&rarr;</span></button>
+        <button class="btn gold" onclick="go(1)">Calculate <span class="arrow">&rarr;</span></button>
         <span class="meta">~90 seconds &middot; free</span>
       </div>
-      <div class="hero-card" aria-hidden="true">
-        <div class="k">Sample verdict</div>
-        <div class="demo-price">$680</div>
-        <div class="demo-sub">fair project price for a business site &middot; Bangladesh &middot; custom WordPress</div>
-        <div class="strip">
-          <div class="cell"><div class="n">82</div><div class="l">Design</div></div>
-          <div class="cell"><div class="n">74</div><div class="l">Function</div></div>
-          <div class="cell"><div class="n">70</div><div class="l">Scope</div></div>
-          <div class="cell"><div class="n">B+</div><div class="l">Grade</div></div>
-        </div>
+      <div class="hero-card counter-card">
+        <div class="live"><span class="dot"></span>Live &middot; websites valued</div>
+        <div class="counter-num" id="counterNum">&hellip;</div>
+        <div class="demo-sub">people who have calculated their website's value here &mdash; the number climbs with every calculation.</div>
       </div>
     </div>
   </section>
@@ -223,14 +251,15 @@
   <section class="screen" id="s1">
     <p class="eyebrow">Step 1 of 5 &mdash; The specimen</p>
     <h2 class="q-title">Which website design are we appraising?</h2>
-    <p class="q-sub">Paste the live link. We scan the layout, responsiveness and build signals. A screenshot is optional but sharpens the read.</p>
+    <p class="q-sub">Paste the live link to a site <em>you</em> designed. Add a screenshot and we'll read its real colour palette and design too.</p>
     <div class="field">
-      <label for="url">Website link</label>
+      <label for="url">Website link <span class="hint">&mdash; required</span></label>
       <input type="url" id="url" placeholder="https://your-design.com" autocomplete="off" />
       <div class="err" id="err-url">Please enter a valid website link (including https://).</div>
+      <div class="err" id="err-owned">This website is owned by someone else.</div>
     </div>
     <div class="field">
-      <label>Screenshot <span class="hint">&mdash; optional</span></label>
+      <label>Screenshot <span class="hint">&mdash; optional, but improves accuracy</span></label>
       <label class="upload" id="uploadbox">
         <input type="file" id="shot" accept="image/*" />
         <div id="uploadtext"><strong>Drop or choose an image</strong><br>PNG or JPG of the homepage</div>
@@ -257,6 +286,28 @@
       <div class="opts" id="opt-platform"></div>
       <div class="err" id="err-platform">Pick the platform it was built on.</div>
     </div>
+    <div class="cond" id="stack-detail">
+      <div class="field">
+        <label>Languages <span class="hint">&mdash; pick any</span></label>
+        <div class="opts" id="opt-langs"></div>
+      </div>
+      <div class="field">
+        <label>Front-end frameworks / libraries <span class="hint">&mdash; pick any</span></label>
+        <div class="opts" id="opt-frontend"></div>
+      </div>
+      <div class="field">
+        <label>Styling <span class="hint">&mdash; pick any</span></label>
+        <div class="opts" id="opt-styling"></div>
+      </div>
+      <div class="field">
+        <label>Back-end frameworks <span class="hint">&mdash; pick any</span></label>
+        <div class="opts" id="opt-backend"></div>
+      </div>
+      <div class="field">
+        <label>Database <span class="hint">&mdash; pick any</span></label>
+        <div class="opts" id="opt-database"></div>
+      </div>
+    </div>
     <div class="field">
       <label>Design approach</label>
       <div class="opts" id="opt-custom"></div>
@@ -282,6 +333,11 @@
       <label>Functionality <span class="hint">&mdash; pick everything it has</span></label>
       <div class="opts" id="opt-feat"></div>
     </div>
+    <div class="field">
+      <label for="buildnotes">Describe how you built it <span class="hint">&mdash; optional, but it sharpens the price</span></label>
+      <textarea id="buildnotes" rows="4" placeholder="e.g. Custom-coded from scratch with a Node backend, Stripe payments, user login and a real-time dashboard — or — basic Elementor template, mostly drag-and-drop, a few sections."></textarea>
+      <div class="hint" style="margin-top:6px">The more complex the work you describe, the higher the value. A simple, basic setup prices lower.</div>
+    </div>
     <div class="nav-row">
       <button class="back" onclick="go(2)">&larr; Back</button>
       <button class="btn" onclick="validate3()">Continue <span class="arrow">&rarr;</span></button>
@@ -305,10 +361,11 @@
     <div class="field">
       <label>Who was it built for?</label>
       <div class="opts" id="opt-client"></div>
+      <div class="err" id="err-client">Pick who it was built for.</div>
     </div>
     <div class="nav-row">
       <button class="back" onclick="go(3)">&larr; Back</button>
-      <button class="btn" onclick="go(5)">Continue <span class="arrow">&rarr;</span></button>
+      <button class="btn" onclick="validate4()">Continue <span class="arrow">&rarr;</span></button>
     </div>
   </section>
 
@@ -320,6 +377,7 @@
     <div class="field">
       <label>Did you use any AI?</label>
       <div class="opts" id="opt-aiused"></div>
+      <div class="err" id="err-aiused">Let us know if AI was involved.</div>
     </div>
     <div class="cond" id="ai-detail">
       <div class="field">
@@ -333,7 +391,7 @@
     </div>
     <div class="nav-row">
       <button class="back" onclick="go(4)">&larr; Back</button>
-      <button class="btn gold" onclick="startScan()">Appraise it <span class="arrow">&rarr;</span></button>
+      <button class="btn gold" onclick="validate5()">Calculate <span class="arrow">&rarr;</span></button>
     </div>
   </section>
 
@@ -348,6 +406,7 @@
 
   <!-- RESULTS -->
   <section class="screen" id="s-result">
+    <div class="shared-banner" id="shared-banner" style="display:none"></div>
     <div class="verdict-head">
       <p class="eyebrow">The verdict</p>
       <h2 id="r-headline">Appraised</h2>
@@ -361,6 +420,7 @@
       </div>
     </div>
     <p class="tag-caption" id="r-caption"></p>
+    <p class="result-note">This is based on online data and market research, so it might not be perfectly accurate &mdash; but at least you get a real sense of how valuable your work is.</p>
 
     <div class="markets-title">The same design, priced across markets</div>
     <div class="markets" id="r-markets"></div>
@@ -371,24 +431,29 @@
       <div class="scard"><div class="name">Scope</div><div class="num" id="r-effort">0</div><div class="meter"><i id="m-effort"></i></div></div>
     </div>
     <div class="grade"><span class="g" id="r-grade"></span></div>
+    <div class="palette" id="r-palette" style="display:none"></div>
+    <p class="design-src" id="r-designsrc"></p>
 
     <div class="breakdown" id="r-breakdown"></div>
     <div class="ai-note" id="r-ainote" style="display:none"></div>
 
-    <div class="share-title">Share the verdict</div>
-    <div class="share-row">
+    <div class="share-title" id="share-title">Share the verdict</div>
+    <div class="share-row" id="share-row">
       <button class="sbtn fb" onclick="share('facebook')">f &middot; Facebook</button>
       <button class="sbtn x" onclick="share('x')">&#120143; &middot; Post</button>
       <button class="sbtn in" onclick="share('linkedin')">in &middot; LinkedIn</button>
       <button class="sbtn ig" onclick="share('instagram')">&#9678; &middot; Instagram</button>
-      <button class="sbtn pdf" onclick="downloadPDF()">&#10515; Download certificate</button>
+      <button class="sbtn pdf" id="pdf-btn" onclick="downloadPDF()">&#10515; Download certificate</button>
     </div>
-    <button class="restart" onclick="restart()">Appraise another website</button>
+    <div id="shared-cta" style="display:none;text-align:center;margin-top:26px">
+      <button class="btn gold" onclick="restart()">Price your own website <span class="arrow">&rarr;</span></button>
+    </div>
+    <button class="restart" id="restartBtn" onclick="restart()">Appraise another website</button>
     <p class="disclaimer" id="r-disclaimer"></p>
   </section>
 </main>
 
-<footer class="foot">PriceMyWeb &middot; built by <b style="color:var(--text)">Tasin Abrar</b> &middot; experimental appraisal desk</footer>
+<footer class="foot">PriceMyWeb &middot; built by <a href="https://www.fiverr.com/tasinabrar" target="_blank" rel="noopener" style="color:var(--text)">Tasin Abrar</a> from <a href="https://techyouknow.com/" target="_blank" rel="noopener" style="color:var(--gold)">TechYouKnow</a></footer>
 
 <script>
 /* =========================================================================
@@ -454,8 +519,8 @@ const PLATFORM = {
 };
 
 const state = {
-  url:"", shot:null, type:"", platform:"", custom:"",
-  pages:null, feats:[], country:"Bangladesh", audience:"", client:"",
+  url:"", shot:null, shotAnalysis:null, type:"", platform:"", custom:"",
+  pages:null, feats:[], buildNotes:"", stack:[], country:"Bangladesh", audience:"", client:"",
   aiUsed:"", aiTools:[], aiPurposes:[]
 };
 
@@ -469,8 +534,6 @@ function go(i){
   if(typeof i==="number")current=i;
   const pct=[0,20,40,60,80,100][Math.min(current,5)];
   document.getElementById("pfill").style.width=pct+"%";
-  const labels=["Appraisal desk","The specimen","What it is","Size & features","Origin & market","AI assistance"];
-  document.getElementById("steplabel").textContent=labels[current]||"Appraisal desk";
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -480,7 +543,7 @@ function singleChips(id,vals,key,cls){
     const b=document.createElement("button");
     b.className="chip"+(cls?" "+cls:"");
     b.innerHTML='<span class="dot"></span>'+v;
-    b.onclick=()=>{state[key]=v;c.querySelectorAll(".chip").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");if(key==="aiUsed")toggleAIDetail(v);};
+    b.onclick=()=>{state[key]=v;c.querySelectorAll(".chip").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");if(key==="aiUsed")toggleAIDetail(v);if(key==="platform")togglePlatformDetail(v);};
     c.appendChild(b);
   });
 }
@@ -504,6 +567,14 @@ singleChips("opt-aiused",["No AI","Yes, a little","Yes, heavily"],"aiUsed");
 multiChips("opt-aitools",["ChatGPT","Claude","Gemini","Midjourney","v0","Cursor","GitHub Copilot","Other"],"aiTools");
 multiChips("opt-aipurpose",["Writing code","Layout / design","Images / graphics","Copywriting","Debugging","Ideas / research"],"aiPurposes");
 
+/* custom-coded stack — all groups feed the single state.stack array */
+multiChips("opt-langs",["HTML/CSS","JavaScript","TypeScript","PHP","Python","Ruby","Java","C#","Go","Rust","SQL"],"stack");
+multiChips("opt-frontend",["React","Next.js","Vue","Nuxt","Angular","Svelte","SvelteKit","Astro","Solid","jQuery","Alpine.js"],"stack");
+multiChips("opt-styling",["Tailwind CSS","Bootstrap","Sass / SCSS","Material UI","Chakra UI","styled-components"],"stack");
+multiChips("opt-backend",["Node.js","Express","NestJS","Laravel","Django","Flask","FastAPI","Ruby on Rails","Spring",".NET"],"stack");
+multiChips("opt-database",["MySQL","PostgreSQL","MongoDB","SQLite","Firebase","Supabase","Redis"],"stack");
+function togglePlatformDetail(v){document.getElementById("stack-detail").classList.toggle("show", v==="Custom-coded");}
+
 /* country + target dropdowns */
 const csel=document.getElementById("country");
 Object.keys(COUNTRY_FACTOR).sort().forEach(c=>{
@@ -520,12 +591,110 @@ asel.onchange=e=>state.audience=e.target.value;
 function toggleAIDetail(v){document.getElementById("ai-detail").classList.toggle("show",v!=="No AI");}
 
 const shot=document.getElementById("shot");
-shot.onchange=()=>{if(shot.files[0]){state.shot=shot.files[0].name;document.getElementById("uploadbox").classList.add("has");document.getElementById("uploadtext").innerHTML="<strong>&#10003; "+shot.files[0].name+"</strong><br>attached";}};
+shot.onchange=()=>{
+  if(shot.files[0]){
+    state.shot=shot.files[0].name;
+    document.getElementById("uploadbox").classList.add("has");
+    document.getElementById("uploadtext").innerHTML="<strong>&#10003; "+shot.files[0].name+"</strong><br>reading design&hellip;";
+    analyzeScreenshot(shot.files[0]);
+  }
+};
+
+/* Real client-side design read from the uploaded image (Canvas API).
+   Extracts palette, colour harmony, contrast and saturation -> a colour score. */
+function analyzeScreenshot(file){
+  try{
+    const img=new Image();
+    const objurl=URL.createObjectURL(file);
+    img.onload=function(){
+      const cv=document.createElement("canvas");
+      const scale=Math.min(1,180/Math.max(img.width,img.height));
+      cv.width=Math.max(1,Math.round(img.width*scale));
+      cv.height=Math.max(1,Math.round(img.height*scale));
+      const ctx=cv.getContext("2d");
+      ctx.drawImage(img,0,0,cv.width,cv.height);
+      let px; try{ px=ctx.getImageData(0,0,cv.width,cv.height).data; }catch(e){ URL.revokeObjectURL(objurl); return; }
+      let n=0,rSum=0,gSum=0,bSum=0,satSum=0,lumMin=1,lumMax=0;
+      const hueBuckets=new Array(12).fill(0);
+      const palBuckets={};
+      for(let i=0;i<px.length;i+=16){ // sample every 4th pixel
+        const r=px[i],g=px[i+1],b=px[i+2],a=px[i+3];
+        if(a<128) continue;
+        n++; rSum+=r; gSum+=g; bSum+=b;
+        const hsl=rgbToHsl(r,g,b);
+        satSum+=hsl[1];
+        const lum=(0.2126*r+0.7152*g+0.0722*b)/255;
+        if(lum<lumMin)lumMin=lum; if(lum>lumMax)lumMax=lum;
+        if(hsl[1]>0.12){ hueBuckets[Math.min(11,Math.floor(hsl[0]*12))]++; }
+        const key=(r>>5)+","+(g>>5)+","+(b>>5);
+        palBuckets[key]=(palBuckets[key]||0)+1;
+      }
+      if(!n){ URL.revokeObjectURL(objurl); return; }
+      const satAvg=satSum/n;
+      const contrast=lumMax-lumMin;
+      const distinctHues=hueBuckets.filter(c=>c> n*0.01).length;
+      // palette: top buckets -> hex
+      const pal=Object.keys(palBuckets).sort((a,b)=>palBuckets[b]-palBuckets[a]).slice(0,6)
+        .map(k=>{const p=k.split(",").map(Number);return rgbToHex(p[0]*32+16,p[1]*32+16,p[2]*32+16);});
+      // colour score: reward contrast + balanced saturation + cohesive (not chaotic) palette
+      let score=52;
+      score+=contrast*26;                                   // strong light/dark range = good
+      score+=(1-Math.abs(satAvg-0.42))*18;                  // pleasant, balanced saturation
+      if(distinctHues>=2&&distinctHues<=5) score+=10;        // cohesive palette
+      else if(distinctHues>=6&&distinctHues<=7) score+=3;
+      else if(distinctHues>7) score-=6;                      // too many clashing hues
+      const colorScore=Math.max(40,Math.min(96,Math.round(score)));
+      const harmony = distinctHues<=5?"cohesive" : distinctHues<=7?"varied" : "busy";
+      state.shotAnalysis={colorScore:colorScore,palette:pal,harmony:harmony,contrast:Math.round(contrast*100),saturation:Math.round(satAvg*100),hues:distinctHues};
+      const ut=document.getElementById("uploadtext");
+      if(ut) ut.innerHTML="<strong>&#10003; "+state.shot+"</strong><br>design read &middot; colour "+colorScore+"/100 &middot; "+harmony+" palette";
+      URL.revokeObjectURL(objurl);
+    };
+    img.onerror=function(){URL.revokeObjectURL(objurl);};
+    img.src=objurl;
+  }catch(e){}
+}
+function rgbToHsl(r,g,b){
+  r/=255;g/=255;b/=255;
+  const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let h=0,s=0;const l=(mx+mn)/2;
+  if(mx!==mn){const d=mx-mn;s=l>0.5?d/(2-mx-mn):d/(mx+mn);
+    if(mx===r)h=(g-b)/d+(g<b?6:0);else if(mx===g)h=(b-r)/d+2;else h=(r-g)/d+4;h/=6;}
+  return [h,s,l];
+}
+function rgbToHex(r,g,b){return "#"+[r,g,b].map(v=>{v=Math.max(0,Math.min(255,Math.round(v)));return v.toString(16).padStart(2,"0");}).join("");}
 
 /* validation */
 function validURL(u){try{const x=new URL(u);return x.protocol==="http:"||x.protocol==="https:";}catch(e){return false;}}
 function err(id,s){document.getElementById(id).classList.toggle("show",s);}
-function validate1(){const u=document.getElementById("url").value.trim();if(!validURL(u)){err("err-url",true);return;}err("err-url",false);state.url=u;go(2);}
+/* well-known sites people almost certainly did not build themselves */
+var FAMOUS=["google","youtube","facebook","fb","instagram","twitter","x","linkedin","amazon","wikipedia","reddit","netflix","apple","microsoft","github","gitlab","fiverr","upwork","freelancer","behance","dribbble","tiktok","whatsapp","telegram","pinterest","tumblr","wordpress","shopify","wix","squarespace","webflow","framer","godaddy","namecheap","cloudflare","medium","quora","yahoo","bing","ebay","alibaba","aliexpress","walmart","target","cnn","bbc","nytimes","forbes","bloomberg","spotify","twitch","discord","zoom","slack","dropbox","adobe","canva","notion","figma","stackoverflow","paypal","stripe","coinbase","binance","booking","airbnb","uber","lyft","samsung","nike","adidas","tesla","openai","anthropic","chatgpt","claude","snapchat","yandex","baidu","tencent","hulu","disney","paypal","mailchimp","hubspot","salesforce","atlassian","trello","asana","zomato","daraz","pathao"];
+function registrableBrand(host){
+  host=host.replace(/^www\./,"").toLowerCase();
+  var parts=host.split("."); if(parts.length<2) return "";
+  var cc=["co","com","net","org","gov","edu","ac"];
+  var idx=parts.length-2;
+  if(parts.length>=3 && cc.indexOf(parts[parts.length-2])>-1) idx=parts.length-3;
+  return parts[idx]||"";
+}
+function famousBrandOf(u){
+  try{ var b=registrableBrand(new URL(u).hostname); if(FAMOUS.indexOf(b)>-1) return b.charAt(0).toUpperCase()+b.slice(1); }catch(e){}
+  return null;
+}
+
+function validate1(){
+  const u=document.getElementById("url").value.trim();
+  err("err-owned",false);
+  if(!validURL(u)){err("err-url",true);return;}
+  err("err-url",false);
+  const brand=famousBrandOf(u);
+  if(brand){
+    document.getElementById("err-owned").textContent="That's "+brand+" — a website owned by someone else, not one you designed. Please enter your own work.";
+    err("err-owned",true); return;
+  }
+  state.url=u; go(2);
+}
+function validate4(){ if(!state.client){err("err-client",true);return;} err("err-client",false); go(5); }
+function validate5(){ if(!state.aiUsed){err("err-aiused",true);return;} err("err-aiused",false); startScan(); }
 function validate2(){
   let ok=true;
   if(!state.type){err("err-type",true);ok=false;}else err("err-type",false);
@@ -533,7 +702,7 @@ function validate2(){
   if(!state.custom){err("err-custom",true);ok=false;}else err("err-custom",false);
   if(ok)go(3);
 }
-function validate3(){const p=parseInt(document.getElementById("pages").value);if(!p||p<1){err("err-pages",true);return;}err("err-pages",false);state.pages=p;go(4);}
+function validate3(){const p=parseInt(document.getElementById("pages").value);if(!p||p<1){err("err-pages",true);return;}err("err-pages",false);state.pages=p;state.buildNotes=document.getElementById("buildnotes").value.trim();go(4);}
 
 /* ---------------- appraisal engine ---------------- */
 function hashScan(url){
@@ -562,8 +731,13 @@ function computeResults(){
   let funcAdd=0; state.feats.forEach(f=>funcAdd+=(FEATURES[f]||0));
   const funcMult=Math.min(1.85, 1+funcAdd);
 
-  // scores
-  const design=Math.max(30,Math.min(98, scan.baseDesign+customB));
+  // scores — design leans on the real screenshot read when one was uploaded
+  let design;
+  if(state.shotAnalysis && typeof state.shotAnalysis.colorScore==="number"){
+    design=Math.max(30,Math.min(98, Math.round(0.62*state.shotAnalysis.colorScore + 0.38*scan.baseDesign) + customB));
+  }else{
+    design=Math.max(30,Math.min(98, scan.baseDesign+customB));
+  }
   const func  =Math.max(30,Math.min(98, scan.baseFunction+state.feats.length*4+(T.key==="ecom"||T.key==="webapp"?6:0)));
   const extraPages=Math.max(0,(state.pages||T.inc)-T.inc);
   const scopeBase=(T.key==="ecom"||T.key==="webapp")?10:0;
@@ -576,8 +750,14 @@ function computeResults(){
   // AI factor (mild)
   const aiMult=state.aiUsed==="Yes, heavily"?0.90 : state.aiUsed==="Yes, a little"?0.97 : 1.0;
 
+  // complexity read from the developer's own description (keyword heuristic)
+  const cx=analyzeBuildNotes(state.buildNotes);
+
+  // custom-coded stack breadth adds modest value/complexity
+  const stackMult = state.stack.length ? Math.min(1.14, 1+0.012*state.stack.length) : 1.0;
+
   // core US value, then scale per market
-  const valueUS=(T.base+extraPages*PAGE_VALUE)*dMult*funcMult*qualityMult*plat.w*aiMult;
+  const valueUS=(T.base+extraPages*PAGE_VALUE)*dMult*funcMult*qualityMult*plat.w*aiMult*cx.mult*stackMult;
 
   const f=COUNTRY_FACTOR[state.country]||COUNTRY_FACTOR["Other / Global"];
   const mid=niceRound(valueUS*f);
@@ -588,9 +768,32 @@ function computeResults(){
   const audC=(state.audience&&COUNTRY_FACTOR[state.audience])?state.audience:null;
   const audMid=audC?niceRound(valueUS*COUNTRY_FACTOR[audC]):null;
 
-  return {design,func,effort,overall,grade:grade(overall),
+  // scope score nudged by described complexity
+  const effortAdj=Math.max(35,Math.min(99, effort+cx.scoreDelta));
+
+  return {design,func,effort:effortAdj,overall:Math.round(design*0.4+func*0.32+effortAdj*0.28),
+          grade:grade(Math.round(design*0.4+func*0.32+effortAdj*0.28)),
           mid,low,high,usa,audC,audMid,valueUS,
-          T,plat,dMult,funcMult,extraPages,aiMult};
+          T,plat,dMult,funcMult,extraPages,aiMult,cx};
+}
+
+/* Reads the free-text build description and returns a complexity multiplier.
+   Complex signals push the price up; basic/simple signals pull it down. */
+function analyzeBuildNotes(text){
+  if(!text) return {mult:1.0, scoreDelta:0, level:"not described", hits:0};
+  const t=" "+text.toLowerCase()+" ";
+  const complex=["custom code","from scratch","hand-coded","hand coded","api","integration","integrations","database","backend","authentication","auth ","login system","user account","real-time","realtime","websocket","dashboard","admin panel","animation","3d","three.js","webgl","headless","microservice","payment","stripe","checkout","multi-language","multilingual","machine learning"," ai ","automation","crm","erp","booking system","react","vue","angular","node","complex","advanced","scalable","microservices"];
+  const simple=["basic","simple","template","static","landing page","one page","single page","one-page","drag and drop","drag-and-drop","no-code","no code","nocode","prebuilt","pre-built","minimal","quick","easy","starter","just a "];
+  let c=0,s=0;
+  complex.forEach(function(k){ if(t.indexOf(k)>-1) c++; });
+  simple.forEach(function(k){ if(t.indexOf(k)>-1) s++; });
+  const net=c-s;
+  // multiplier ranges ~0.85 (very basic) to ~1.35 (very complex)
+  let mult=1+0.055*c-0.05*s;
+  mult=Math.max(0.85, Math.min(1.35, mult));
+  const scoreDelta=Math.max(-8, Math.min(10, net*2));
+  const level = net>=3?"highly complex" : net>=1?"above-average complexity" : net<=-2?"basic / simple" : "standard";
+  return {mult:mult, scoreDelta:scoreDelta, level:level, hits:c+s};
 }
 
 /* scanning animation */
@@ -619,7 +822,8 @@ let R=null;
 function showResults(){
   R=computeResults();go("s-result");
   document.getElementById("pfill").style.width="100%";
-  document.getElementById("steplabel").textContent="Verdict";
+  bumpCounter();
+  document.getElementById("r-breakdown").style.display="";
 
   document.getElementById("r-site").textContent=state.url;
   document.getElementById("r-range").textContent="range $"+R.low.toLocaleString()+" – $"+R.high.toLocaleString();
@@ -641,14 +845,26 @@ function showResults(){
   setScore("r-design","m-design",R.design);
   setScore("r-func","m-func",R.func);
   setScore("r-effort","m-effort",R.effort);
-  document.getElementById("r-grade").textContent="Overall grade "+R.grade+" &middot; "+R.overall+"/100";
   document.getElementById("r-grade").innerHTML="Overall grade "+R.grade+" &middot; "+R.overall+"/100";
+
+  // palette + how the design was read
+  const pal=document.getElementById("r-palette");
+  const src=document.getElementById("r-designsrc");
+  if(state.shotAnalysis && state.shotAnalysis.palette){
+    pal.style.display="flex";
+    pal.innerHTML=state.shotAnalysis.palette.map(function(hx){return '<span class="sw" style="background:'+hx+'" title="'+hx+'"></span>';}).join("");
+    src.textContent="Design read from your screenshot — colour "+state.shotAnalysis.colorScore+"/100, "+state.shotAnalysis.harmony+" palette, "+state.shotAnalysis.contrast+"% contrast.";
+  }else{
+    pal.style.display="none";pal.innerHTML="";
+    src.textContent="Design estimated from your answers. Upload a screenshot next time for a sharper, colour-based read.";
+  }
 
   const bd=document.getElementById("r-breakdown");bd.innerHTML="";
   const featTxt=state.feats.length?state.feats.length+" features":"none";
-  [["Site type",state.type],["Design approach",state.custom],["Pages",state.pages],
-   ["Functionality",featTxt],["Platform",state.platform],["Built for",state.client||"—"]]
-   .forEach(r=>{bd.innerHTML+='<div class="brow"><span class="k">'+r[0]+'</span><span class="v">'+r[1]+'</span></div>';});
+  var rows=[["Site type",state.type],["Design approach",state.custom],["Pages",state.pages],
+   ["Functionality",featTxt],["Build complexity",R.cx.level],["Platform",state.platform],["Built for",state.client||"—"]];
+  if(state.stack.length) rows.splice(6,0,["Tech stack",state.stack.join(", ")]);
+  rows.forEach(r=>{bd.innerHTML+='<div class="brow"><span class="k">'+r[0]+'</span><span class="v">'+r[1]+'</span></div>';});
 
   const note=document.getElementById("r-ainote");
   if(state.aiUsed&&state.aiUsed!=="No AI"){
@@ -673,21 +889,27 @@ function countUp(id,target){
   const t=setInterval(()=>{n+=step;if(n>=target){n=target;clearInterval(t);}el.textContent=n.toLocaleString();},20);
 }
 
-/* share */
-function shareText(){return "My website design just got appraised on PriceMyWeb — Grade "+R.grade+", valued at $"+R.mid.toLocaleString()+" for the "+state.country+" market. Design "+R.design+" · Function "+R.func+" · Scope "+R.effort+". pricemyweb.com";}
+/* share — shares a link that reproduces THIS result */
+function buildShareURL(){
+  const base=location.origin+location.pathname;
+  const c={u:state.url,t:state.type,c:state.country,m:R.mid,us:R.usa,ac:R.audC||"",am:R.audMid||"",d:R.design,f:R.func,s:R.effort,g:R.grade,o:R.overall};
+  try{return base+"?r="+encodeURIComponent(btoa(JSON.stringify(c)));}catch(e){return base;}
+}
+function shareText(){return "My website design just got appraised on PriceMyWeb — Grade "+R.grade+", valued at $"+R.mid.toLocaleString()+" for the "+state.country+" market. Design "+R.design+" · Function "+R.func+" · Scope "+R.effort+".";}
 function share(net){
-  const url=encodeURIComponent(window.location.href),txt=encodeURIComponent(shareText());let link="";
+  const shareUrl=buildShareURL();
+  const url=encodeURIComponent(shareUrl),txt=encodeURIComponent(shareText());let link="";
   if(net==="facebook")link="https://www.facebook.com/sharer/sharer.php?u="+url+"&quote="+txt;
   else if(net==="x")link="https://twitter.com/intent/tweet?text="+txt+"&url="+url;
-  else if(net==="linkedin")link="https://www.linkedin.com/sharing/share-offset?url="+url;
-  else if(net==="instagram"){copyCaption();alert("Instagram has no web share link — your caption + link are copied. Paste them with your certificate image in the app.");return;}
+  else if(net==="linkedin")link="https://www.linkedin.com/sharing/share-offsite/?url="+url;
+  else if(net==="instagram"){copyCaption();alert("Instagram has no web share link — your result link + caption are copied. Paste them with your certificate image in the app.");return;}
   const w=window.open(link,"_blank","noopener,width=640,height=580");
   if(!w||w.closed||typeof w.closed==="undefined"){
     copyCaption();
-    alert("Your browser blocked the share popup (this happens inside the in-chat preview). The post text + link are copied to your clipboard.\n\nOn your live site the button opens "+net.charAt(0).toUpperCase()+net.slice(1)+" directly.");
+    alert("Your browser blocked the share popup (this happens inside the in-chat preview). Your result link + text are copied to the clipboard.\n\nOn your live site the button opens "+net.charAt(0).toUpperCase()+net.slice(1)+" directly.");
   }
 }
-function copyCaption(){try{if(navigator.clipboard)navigator.clipboard.writeText(shareText()+" "+window.location.href);}catch(e){}}
+function copyCaption(){try{if(navigator.clipboard)navigator.clipboard.writeText(shareText()+" "+buildShareURL());}catch(e){}}
 
 /* PDF certificate */
 function downloadPDF(){
@@ -737,15 +959,99 @@ function downloadPDF(){
 }
 
 function restart(){
-  Object.assign(state,{url:"",shot:null,type:"",platform:"",custom:"",pages:null,feats:[],country:"Bangladesh",audience:"",client:"",aiUsed:"",aiTools:[],aiPurposes:[]});
+  Object.assign(state,{url:"",shot:null,shotAnalysis:null,type:"",platform:"",custom:"",pages:null,feats:[],buildNotes:"",stack:[],country:"Bangladesh",audience:"",client:"",aiUsed:"",aiTools:[],aiPurposes:[]});
   document.getElementById("url").value="";document.getElementById("pages").value="";
+  var bn=document.getElementById("buildnotes");if(bn)bn.value="";
+  var sd=document.getElementById("stack-detail");if(sd)sd.classList.remove("show");
+  err("err-owned",false);err("err-client",false);err("err-aiused",false);
   document.getElementById("uploadbox").classList.remove("has");
   document.getElementById("uploadtext").innerHTML="<strong>Drop or choose an image</strong><br>PNG or JPG of the homepage";
   document.querySelectorAll(".chip.sel").forEach(c=>c.classList.remove("sel"));
   document.getElementById("ai-detail").classList.remove("show");
   csel.value="Bangladesh";asel.value="";
+  // clear shared-result UI + the ?r from the address bar
+  document.getElementById("shared-banner").style.display="none";
+  document.getElementById("shared-cta").style.display="none";
+  document.getElementById("restartBtn").style.display="";
+  document.getElementById("pdf-btn").style.display="";
+  document.getElementById("share-title").textContent="Share the verdict";
+  document.getElementById("r-breakdown").style.display="";
+  try{history.replaceState({},"",location.origin+location.pathname);}catch(e){}
   go(0);
 }
+
+/* ---------------- live counter (Cloudflare Function + KV) ---------------- */
+function setCounter(n){var el=document.getElementById("counterNum");if(el)el.textContent=Number(n).toLocaleString();}
+function loadCounter(){
+  fetch("/api/count").then(function(r){return r.json();})
+    .then(function(d){ setCounter((d&&typeof d.count==="number")?d.count:0); })
+    .catch(function(){ setCounter(0); }); // shows real total once the KV backend is connected
+}
+function bumpCounter(){
+  fetch("/api/count",{method:"POST"}).then(function(r){return r.json();})
+    .then(function(d){ if(d&&typeof d.count==="number") setCounter(d.count); })
+    .catch(function(){});
+}
+loadCounter();
+
+/* ---------------- light / dark theme (sun = light, moon = dark) ---------------- */
+var SUN_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+var MOON_SVG='<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+function setTheme(mode){
+  document.documentElement.setAttribute("data-theme", mode);
+  var btn=document.getElementById("themeToggle");
+  if(btn){ btn.innerHTML = (mode==="dark")?MOON_SVG:SUN_SVG; btn.title = (mode==="dark")?"Switch to light mode":"Switch to dark mode"; }
+  try{ localStorage.setItem("pmw-theme", mode); }catch(e){}
+}
+function toggleTheme(){
+  var cur=document.documentElement.getAttribute("data-theme")==="dark"?"dark":"light";
+  setTheme(cur==="dark"?"light":"dark");
+}
+(function initTheme(){ var saved="light"; try{ saved=localStorage.getItem("pmw-theme")||"light"; }catch(e){} setTheme(saved); })();
+
+/* ---------------- shared result view (?r=...) ---------------- */
+function renderSharedResult(c){
+  R={mid:c.m,usa:c.us,audC:c.ac||null,audMid:c.am||null,design:c.d,func:c.f,effort:c.s,grade:c.g,overall:c.o,low:0,high:0};
+  state.url=c.u||"";state.country=c.c||"";state.type=c.t||"";
+  go("s-result");
+  document.getElementById("pfill").style.width="100%";
+  document.getElementById("shared-banner").style.display="block";
+  document.getElementById("shared-banner").innerHTML="Someone shared their PriceMyWeb appraisal &mdash; here's what their website design is worth.";
+  document.getElementById("r-site").textContent=c.u||"";
+  document.getElementById("r-headline").innerHTML="Grade "+c.g+" &middot; appraised";
+  document.getElementById("r-range").textContent="";
+  document.getElementById("r-price").textContent=Number(c.m).toLocaleString();
+  document.getElementById("r-caption").innerHTML="A "+(c.t?c.t.toLowerCase():"website")+" priced for the <b>"+c.c+"</b> market.";
+  var mk=document.getElementById("r-markets");
+  var rows=[{c:c.c,n:"designer's home market",v:c.m,cls:"primary",badge:"appraised"}];
+  if(c.c!=="United States")rows.push({c:"United States",n:"US market rate",v:c.us,cls:"us"});
+  if(c.ac&&c.ac!==c.c&&c.ac!=="United States")rows.push({c:c.ac,n:"market it was built for",v:c.am,cls:""});
+  mk.innerHTML=rows.map(function(r){return '<div class="mrow '+r.cls+'"><div class="who"><span class="c">'+r.c+(r.badge?'<span class="badge">'+r.badge+'</span>':'')+'</span><span class="n">'+r.n+'</span></div><span class="amt">$'+Number(r.v).toLocaleString()+'</span></div>';}).join("");
+  document.getElementById("r-design").textContent=c.d;
+  document.getElementById("r-func").textContent=c.f;
+  document.getElementById("r-effort").textContent=c.s;
+  document.getElementById("m-design").style.width=c.d+"%";
+  document.getElementById("m-func").style.width=c.f+"%";
+  document.getElementById("m-effort").style.width=c.s+"%";
+  document.getElementById("r-grade").innerHTML="Overall grade "+c.g+" &middot; "+c.o+"/100";
+  document.getElementById("r-breakdown").style.display="none";
+  document.getElementById("r-ainote").style.display="none";
+  var pl=document.getElementById("r-palette");if(pl){pl.style.display="none";}
+  var ds=document.getElementById("r-designsrc");if(ds){ds.textContent="";}
+  document.getElementById("pdf-btn").style.display="none";
+  document.getElementById("restartBtn").style.display="none";
+  document.getElementById("shared-cta").style.display="block";
+  document.getElementById("share-title").textContent="Share this appraisal";
+  document.getElementById("r-disclaimer").innerHTML="Experimental estimate from PriceMyWeb. Prices are fixed-project benchmarks, not a formal appraisal or wage guarantee.";
+}
+(function checkShared(){
+  try{
+    var p=new URLSearchParams(location.search).get("r");
+    if(!p)return;
+    var c=JSON.parse(atob(decodeURIComponent(p)));
+    if(c&&c.m)renderSharedResult(c);
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
