@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Price My Web — Website Design Value &amp; Cost Calculator</title>
+<meta name="description" content="What's your website design worth? PriceMyWeb grades design, functionality and scope, then gives a fair, market-based project price for your country — free, with a shareable certificate.">
+<meta name="author" content="Tasin Abrar">
+<link rel="canonical" href="https://pricemyweb.com/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2316181d'/><text x='16' y='23' font-size='20' text-anchor='middle' fill='%23e4b04a' font-family='monospace' font-weight='bold'>$</text></svg>">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pricemyweb.com/">
+<meta property="og:title" content="Price My Web — What's your website design worth?">
+<meta property="og:description" content="Grade any website design and get a fair, market-based project price. Free appraisal plus a shareable certificate.">
+<meta property="og:image" content="https://pricemyweb.com/preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Price My Web — What's your website design worth?">
+<meta name="twitter:description" content="Grade any website design and get a fair, market-based project price. Free.">
+<meta name="twitter:image" content="https://pricemyweb.com/preview.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"PriceMyWeb","url":"https://pricemyweb.com/","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"creator":{"@type":"Person","name":"Tasin Abrar"},"description":"Website design value and cost calculator that grades design, functionality and scope and returns a fair, market-based project price."}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#16181d; --ink-soft:#242833; --paper:#efece4; --card:#ffffff;
+    --line:#dcd8cd; --line-strong:#c7c2b4; --muted:#6b6960; --text:#22242b;
+    --gold:#c69a3e; --gold-bright:#e4b04a; --gold-ink:#4a3a13;
+    --teal:#1f6f6b; --teal-soft:#e2efed; --danger:#a8452f;
+    --radius:14px; --shadow:0 1px 0 rgba(0,0,0,.02), 0 18px 40px -24px rgba(20,20,25,.4);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--paper);color:var(--text);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh}
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.01em}
+  .mono{font-family:'JetBrains Mono',monospace}
+  button{font-family:inherit;cursor:pointer}
+  a{color:inherit}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+  header.top{position:sticky;top:0;z-index:20;background:rgba(239,236,228,.86);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .top-inner{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk';font-weight:700;font-size:17px}
+  .brand .seal{width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--gold-bright);display:grid;place-items:center;font-size:12px;font-weight:700;border:1.5px solid var(--gold)}
+  .brand .q{color:var(--gold)}
+  .steplabel{font-size:12.5px;color:var(--muted);font-family:'JetBrains Mono'}
+  .progress{height:3px;background:var(--line);position:relative;overflow:hidden}
+  .progress .fill{position:absolute;inset:0 auto 0 0;width:0;background:var(--gold);transition:width .4s cubic-bezier(.4,0,.2,1)}
+
+  section.screen{display:none;padding:38px 0 90px;animation:rise .45s ease both}
+  section.screen.active{display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .eyebrow{font-family:'JetBrains Mono';font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 12px}
+  .q-title{font-size:26px;font-weight:600;margin:0 0 6px;line-height:1.18}
+  .q-sub{color:var(--muted);margin:0 0 26px;font-size:15px;max-width:56ch}
+
+  .hero{padding:52px 0 30px}
+  .hero h1{font-size:clamp(40px,8vw,68px);line-height:.98;margin:0 0 8px;font-weight:700}
+  .hero h1 .price{color:var(--gold);position:relative;white-space:nowrap}
+  .hero .tag-emph{display:inline-block;transform:rotate(-3deg)}
+  .hero p.lead{font-size:18px;color:var(--muted);max-width:48ch;margin:14px 0 30px}
+  .hero .row{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+  .hero .meta{font-size:13px;color:var(--muted);font-family:'JetBrains Mono'}
+  .hero-card{margin-top:38px;background:var(--ink);color:#f2efe6;border-radius:18px;padding:26px 26px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .hero-card .k{font-family:'JetBrains Mono';font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#9c9787}
+  .hero-card .demo-price{font-family:'JetBrains Mono';font-weight:700;font-size:40px;color:var(--gold-bright);margin:2px 0 0}
+  .hero-card .demo-sub{color:#b9b4a6;font-size:13px;margin-top:4px}
+  .hero-card .strip{display:flex;gap:22px;margin-top:20px;flex-wrap:wrap}
+  .hero-card .strip .cell .n{font-family:'JetBrains Mono';font-weight:700;font-size:20px;color:#f2efe6}
+  .hero-card .strip .cell .l{font-size:11px;color:#9c9787;text-transform:uppercase;letter-spacing:.08em}
+  .hero-card::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border:1px solid rgba(228,176,74,.2);border-radius:50%}
+
+  .btn{display:inline-flex;align-items:center;gap:9px;background:var(--ink);color:#fff;border:none;border-radius:999px;padding:14px 26px;font-size:15px;font-weight:600;transition:transform .12s ease, background .2s}
+  .btn:hover{transform:translateY(-1px);background:#000}
+  .btn.gold{background:var(--gold);color:var(--gold-ink)}
+  .btn.gold:hover{background:var(--gold-bright)}
+  .btn.ghost{background:transparent;color:var(--text);border:1.5px solid var(--line-strong)}
+  .btn[disabled]{opacity:.4;pointer-events:none}
+  .btn .arrow{transition:transform .2s}
+  .btn:hover .arrow{transform:translateX(3px)}
+  .nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:34px;gap:12px}
+  .back{background:none;border:none;color:var(--muted);font-size:14px;font-weight:500;padding:8px 4px;display:inline-flex;gap:6px;align-items:center}
+  .back:hover{color:var(--text)}
+
+  .field{margin-bottom:22px}
+  .field > label{display:block;font-weight:600;font-size:14.5px;margin-bottom:8px}
+  .field .hint{font-weight:400;color:var(--muted);font-size:13px}
+  input[type=text],input[type=url],input[type=number],select{width:100%;padding:14px 15px;border:1.5px solid var(--line-strong);border-radius:11px;background:var(--card);font-size:15.5px;font-family:inherit;color:var(--text);transition:border .15s, box-shadow .15s}
+  input:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(198,154,62,.18)}
+
+  .opts{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{border:1.5px solid var(--line-strong);background:var(--card);border-radius:11px;padding:12px 15px;font-size:14.5px;font-weight:500;color:var(--text);transition:all .14s;display:inline-flex;align-items:center;gap:8px}
+  .chip:hover{border-color:var(--gold)}
+  .chip.sel{border-color:var(--ink);background:var(--ink);color:#fff}
+  .chip.sel.teal{border-color:var(--teal);background:var(--teal)}
+  .chip .dot{width:8px;height:8px;border-radius:50%;background:var(--line-strong)}
+  .chip.sel .dot{background:var(--gold-bright)}
+
+  .upload{border:1.6px dashed var(--line-strong);border-radius:12px;padding:18px;text-align:center;color:var(--muted);font-size:14px;background:var(--card);transition:border .15s,background .15s}
+  .upload:hover{border-color:var(--gold);background:#fffdf7}
+  .upload strong{color:var(--text)}
+  .upload input{display:none}
+  .upload.has{border-style:solid;border-color:var(--teal);color:var(--teal);background:var(--teal-soft)}
+
+  .cond{display:none;margin-top:6px;padding-left:16px;border-left:2px solid var(--gold);animation:rise .3s ease both}
+  .cond.show{display:block}
+
+  #scan{text-align:center;padding-top:70px}
+  .loupe{width:88px;height:88px;margin:0 auto 26px;position:relative}
+  .loupe .ring{position:absolute;inset:0;border:3px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite}
+  .loupe .core{position:absolute;inset:22px;border-radius:50%;background:var(--ink);display:grid;place-items:center;color:var(--gold-bright);font-size:22px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .scanlog{font-family:'JetBrains Mono';font-size:13.5px;color:var(--muted);min-height:22px;margin-top:8px}
+  .scanlog .done{color:var(--teal)}
+
+  .verdict-head{text-align:center;margin-bottom:8px}
+  .verdict-head .eyebrow{margin-bottom:6px}
+  .verdict-head h2{font-size:24px;margin:0 0 2px}
+  .verdict-head .site{font-family:'JetBrains Mono';font-size:13px;color:var(--muted);word-break:break-all}
+
+  .tag-stage{display:flex;justify-content:center;margin:26px 0 10px;perspective:800px}
+  .price-tag{position:relative;background:var(--ink);color:#f4f1e9;border-radius:8px 16px 16px 8px;padding:24px 34px 24px 40px;box-shadow:0 26px 50px -22px rgba(20,20,25,.6);transform:rotate(-2.2deg)}
+  .price-tag::before{content:"";position:absolute;left:14px;top:50%;transform:translateY(-50%);width:15px;height:15px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 2px var(--gold)}
+  .price-tag .string{position:absolute;left:-38px;top:50%;width:44px;height:2px;background:var(--gold);transform:translateY(-50%) rotate(-18deg);transform-origin:right}
+  .price-tag .cur{font-family:'JetBrains Mono';font-size:16px;color:var(--gold-bright);vertical-align:top}
+  .price-tag .amt{font-family:'JetBrains Mono';font-weight:700;font-size:clamp(38px,10vw,58px);color:var(--gold-bright);line-height:1}
+  .price-tag .range{font-family:'JetBrains Mono';font-size:12.5px;color:#b9b4a6;margin-top:6px;text-align:right}
+  .tag-caption{text-align:center;color:var(--muted);font-size:14px;max-width:46ch;margin:14px auto 0}
+  .tag-caption b{color:var(--text)}
+
+  .markets-title{text-align:center;font-family:'Space Grotesk';font-weight:600;font-size:15px;color:var(--muted);margin:24px 0 12px}
+  .markets{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:6px}
+  .mrow{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:15px 18px;border-bottom:1px solid var(--line)}
+  .mrow:last-child{border-bottom:none}
+  .mrow .who{display:flex;flex-direction:column;gap:2px}
+  .mrow .who .c{font-weight:600;font-size:15px}
+  .mrow .who .n{font-size:12px;color:var(--muted)}
+  .mrow .amt{font-family:'JetBrains Mono';font-weight:700;font-size:20px;white-space:nowrap}
+  .mrow.primary{background:#fbf6e9}
+  .mrow.primary .c{color:var(--gold-ink)}
+  .mrow.primary .amt{color:var(--gold)}
+  .mrow.primary .badge{display:inline-block;margin-left:8px;font-size:10px;font-family:'JetBrains Mono';letter-spacing:.06em;text-transform:uppercase;color:var(--gold-ink);background:var(--gold-bright);border-radius:5px;padding:2px 6px;vertical-align:middle}
+  .mrow.us .amt{color:var(--teal)}
+
+  .scores{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0 4px}
+  .scard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 15px}
+  .scard .name{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-family:'JetBrains Mono'}
+  .scard .num{font-family:'JetBrains Mono';font-weight:700;font-size:30px;margin:4px 0 8px}
+  .meter{height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+  .meter i{display:block;height:100%;width:0;background:var(--teal);border-radius:99px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+  .grade{display:inline-block;margin-top:20px;text-align:center;width:100%}
+  .grade .g{font-family:'Space Grotesk';font-weight:700;font-size:15px}
+
+  .breakdown{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 18px;margin:24px 0}
+  .brow{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px;gap:12px}
+  .brow:last-child{border-bottom:none}
+  .brow .k{color:var(--muted)}
+  .brow .v{font-family:'JetBrains Mono';font-weight:500;text-align:right}
+  .ai-note{background:var(--teal-soft);border:1px solid #bcd8d4;color:#0f4f4b;border-radius:12px;padding:14px 16px;font-size:14px;margin:20px 0}
+  .ai-note b{font-weight:600}
+
+  .share-title{font-family:'Space Grotesk';font-weight:600;font-size:16px;margin:34px 0 12px;text-align:center}
+  .share-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .sbtn{border:1.5px solid var(--line-strong);background:var(--card);border-radius:10px;padding:11px 16px;font-size:14px;font-weight:600;display:inline-flex;gap:8px;align-items:center;transition:all .14s}
+  .sbtn:hover{transform:translateY(-1px);border-color:var(--ink)}
+  .sbtn.fb:hover{border-color:#1877f2;color:#1877f2}
+  .sbtn.in:hover{border-color:#0a66c2;color:#0a66c2}
+  .sbtn.ig:hover{border-color:#d6249f;color:#d6249f}
+  .sbtn.pdf{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .sbtn.pdf:hover{background:#000;color:var(--gold-bright)}
+  .restart{display:block;margin:30px auto 0;background:none;border:none;color:var(--muted);font-size:13.5px;text-decoration:underline;text-underline-offset:3px}
+  .restart:hover{color:var(--text)}
+  .disclaimer{font-size:12px;color:var(--muted);line-height:1.6;margin-top:34px;padding-top:18px;border-top:1px solid var(--line);text-align:center}
+  .err{color:var(--danger);font-size:13px;margin-top:8px;font-weight:500;display:none}
+  .err.show{display:block}
+  footer.foot{text-align:center;padding:26px 0 40px;color:var(--muted);font-size:12.5px;font-family:'JetBrains Mono'}
+
+  @media(max-width:560px){.scores{grid-template-columns:1fr}.hero-card .strip{gap:16px}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-inner">
+    <div class="brand"><span class="seal">$</span>Price<span class="q">MyWeb</span></div>
+    <div class="steplabel" id="steplabel">Appraisal desk</div>
+  </div>
+  <div class="progress"><div class="fill" id="pfill"></div></div>
+</header>
+
+<main class="wrap">
+
+  <!-- INTRO -->
+  <section class="screen active" id="s-intro">
+    <div class="hero">
+      <p class="eyebrow">Website-design appraisal</p>
+      <h1>What's the <span class="price"><span class="tag-emph">price</span></span> of a website design?</h1>
+      <p class="lead">Bring in a site you designed. We grade the design, functionality and scope, then price it as a real project — for the market where <em>you</em> built it.</p>
+      <div class="row">
+        <button class="btn gold" onclick="go(1)">Appraise a design <span class="arrow">&rarr;</span></button>
+        <span class="meta">~90 seconds &middot; free</span>
+      </div>
+      <div class="hero-card" aria-hidden="true">
+        <div class="k">Sample verdict</div>
+        <div class="demo-price">$680</div>
+        <div class="demo-sub">fair project price for a business site &middot; Bangladesh &middot; custom WordPress</div>
+        <div class="strip">
+          <div class="cell"><div class="n">82</div><div class="l">Design</div></div>
+          <div class="cell"><div class="n">74</div><div class="l">Function</div></div>
+          <div class="cell"><div class="n">70</div><div class="l">Scope</div></div>
+          <div class="cell"><div class="n">B+</div><div class="l">Grade</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 1: the site -->
+  <section class="screen" id="s1">
+    <p class="eyebrow">Step 1 of 5 &mdash; The specimen</p>
+    <h2 class="q-title">Which website design are we appraising?</h2>
+    <p class="q-sub">Paste the live link. We scan the layout, responsiveness and build signals. A screenshot is optional but sharpens the read.</p>
+    <div class="field">
+      <label for="url">Website link</label>
+      <input type="url" id="url" placeholder="https://your-design.com" autocomplete="off" />
+      <div class="err" id="err-url">Please enter a valid website link (including https://).</div>
+    </div>
+    <div class="field">
+      <label>Screenshot <span class="hint">&mdash; optional</span></label>
+      <label class="upload" id="uploadbox">
+        <input type="file" id="shot" accept="image/*" />
+        <div id="uploadtext"><strong>Drop or choose an image</strong><br>PNG or JPG of the homepage</div>
+      </label>
+    </div>
+    <div class="nav-row">
+      <button class="back" onclick="go(0)">&larr; Back</button>
+      <button class="btn" onclick="validate1()">Continue <span class="arrow">&rarr;</span></button>
+    </div>
+  </section>
+
+  <!-- STEP 2: type & build -->
+  <section class="screen" id="s2">
+    <p class="eyebrow">Step 2 of 5 &mdash; What it is</p>
+    <h2 class="q-title">What kind of website is it?</h2>
+    <p class="q-sub">Type drives the price more than anything else &mdash; a brochure site and an online store are different jobs entirely.</p>
+    <div class="field">
+      <label>Site type</label>
+      <div class="opts" id="opt-type"></div>
+      <div class="err" id="err-type">Pick the type of site.</div>
+    </div>
+    <div class="field">
+      <label>Platform / CMS</label>
+      <div class="opts" id="opt-platform"></div>
+      <div class="err" id="err-platform">Pick the platform it was built on.</div>
+    </div>
+    <div class="field">
+      <label>Design approach</label>
+      <div class="opts" id="opt-custom"></div>
+      <div class="err" id="err-custom">Choose how the design was made.</div>
+    </div>
+    <div class="nav-row">
+      <button class="back" onclick="go(1)">&larr; Back</button>
+      <button class="btn" onclick="validate2()">Continue <span class="arrow">&rarr;</span></button>
+    </div>
+  </section>
+
+  <!-- STEP 3: size & features -->
+  <section class="screen" id="s3">
+    <p class="eyebrow">Step 3 of 5 &mdash; Size &amp; features</p>
+    <h2 class="q-title">How big is it, and what does it do?</h2>
+    <p class="q-sub">Pages and functionality are what separate a $400 site from a $4,000 one. Only count real features that were actually built.</p>
+    <div class="field">
+      <label for="pages">How many pages?</label>
+      <input type="number" id="pages" min="1" max="500" placeholder="e.g. 6" />
+      <div class="err" id="err-pages">Enter the number of pages.</div>
+    </div>
+    <div class="field">
+      <label>Functionality <span class="hint">&mdash; pick everything it has</span></label>
+      <div class="opts" id="opt-feat"></div>
+    </div>
+    <div class="nav-row">
+      <button class="back" onclick="go(2)">&larr; Back</button>
+      <button class="btn" onclick="validate3()">Continue <span class="arrow">&rarr;</span></button>
+    </div>
+  </section>
+
+  <!-- STEP 4: origin & audience -->
+  <section class="screen" id="s4">
+    <p class="eyebrow">Step 4 of 5 &mdash; Origin &amp; market</p>
+    <h2 class="q-title">Where was it built, and who for?</h2>
+    <p class="q-sub">The valuation is anchored to the market where the designer works. Same design, different country, different fair price.</p>
+    <div class="field">
+      <label for="country">Where is the designer based?</label>
+      <select id="country"></select>
+    </div>
+    <div class="field">
+      <label for="audience">Which market was the site built for?</label>
+      <select id="audience"></select>
+      <div class="hint" style="margin-top:6px">We'll show what this design is worth in that market too.</div>
+    </div>
+    <div class="field">
+      <label>Who was it built for?</label>
+      <div class="opts" id="opt-client"></div>
+    </div>
+    <div class="nav-row">
+      <button class="back" onclick="go(3)">&larr; Back</button>
+      <button class="btn" onclick="go(5)">Continue <span class="arrow">&rarr;</span></button>
+    </div>
+  </section>
+
+  <!-- STEP 5: AI -->
+  <section class="screen" id="s5">
+    <p class="eyebrow">Step 5 of 5 &mdash; AI assistance</p>
+    <h2 class="q-title">Did AI help build this?</h2>
+    <p class="q-sub">No judgment &mdash; AI is a tool. It nudges how the effort is weighted, and it's noted transparently on the certificate.</p>
+    <div class="field">
+      <label>Did you use any AI?</label>
+      <div class="opts" id="opt-aiused"></div>
+    </div>
+    <div class="cond" id="ai-detail">
+      <div class="field">
+        <label>Which AI tools? <span class="hint">&mdash; pick any</span></label>
+        <div class="opts" id="opt-aitools"></div>
+      </div>
+      <div class="field">
+        <label>What did you use it for? <span class="hint">&mdash; pick any</span></label>
+        <div class="opts" id="opt-aipurpose"></div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="back" onclick="go(4)">&larr; Back</button>
+      <button class="btn gold" onclick="startScan()">Appraise it <span class="arrow">&rarr;</span></button>
+    </div>
+  </section>
+
+  <!-- SCANNING -->
+  <section class="screen" id="s-scan">
+    <div id="scan">
+      <div class="loupe"><div class="ring"></div><div class="core">&#128269;</div></div>
+      <h2 class="q-title" style="margin-bottom:14px">Examining the design&hellip;</h2>
+      <div class="scanlog" id="scanlog">Fetching markup&hellip;</div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="screen" id="s-result">
+    <div class="verdict-head">
+      <p class="eyebrow">The verdict</p>
+      <h2 id="r-headline">Appraised</h2>
+      <div class="site" id="r-site"></div>
+    </div>
+    <div class="tag-stage">
+      <div class="price-tag">
+        <span class="string"></span>
+        <span class="cur">$</span><span class="amt" id="r-price">0</span>
+        <div class="range" id="r-range"></div>
+      </div>
+    </div>
+    <p class="tag-caption" id="r-caption"></p>
+
+    <div class="markets-title">The same design, priced across markets</div>
+    <div class="markets" id="r-markets"></div>
+
+    <div class="scores">
+      <div class="scard"><div class="name">Design</div><div class="num" id="r-design">0</div><div class="meter"><i id="m-design"></i></div></div>
+      <div class="scard"><div class="name">Functionality</div><div class="num" id="r-func">0</div><div class="meter"><i id="m-func"></i></div></div>
+      <div class="scard"><div class="name">Scope</div><div class="num" id="r-effort">0</div><div class="meter"><i id="m-effort"></i></div></div>
+    </div>
+    <div class="grade"><span class="g" id="r-grade"></span></div>
+
+    <div class="breakdown" id="r-breakdown"></div>
+    <div class="ai-note" id="r-ainote" style="display:none"></div>
+
+    <div class="share-title">Share the verdict</div>
+    <div class="share-row">
+      <button class="sbtn fb" onclick="share('facebook')">f &middot; Facebook</button>
+      <button class="sbtn x" onclick="share('x')">&#120143; &middot; Post</button>
+      <button class="sbtn in" onclick="share('linkedin')">in &middot; LinkedIn</button>
+      <button class="sbtn ig" onclick="share('instagram')">&#9678; &middot; Instagram</button>
+      <button class="sbtn pdf" onclick="downloadPDF()">&#10515; Download certificate</button>
+    </div>
+    <button class="restart" onclick="restart()">Appraise another website</button>
+    <p class="disclaimer" id="r-disclaimer"></p>
+  </section>
+</main>
+
+<footer class="foot">PriceMyWeb &middot; built by <b style="color:var(--text)">Tasin Abrar</b> &middot; experimental appraisal desk</footer>
+
+<script>
+/* =========================================================================
+   WHAT'S THE PRICE?? — project-based website-design appraisal
+   Single-file prototype, front-end only, in-memory state (no storage).
+
+   PRICING MODEL (fixed-price, NOT hourly — build time is irrelevant):
+     valueUS = (typeBase + extraPages*PAGE)  * designMult * funcMult
+               * qualityMult * platformMult * aiMult
+     countryPrice = niceRound( valueUS * COUNTRY_FACTOR[country] )
+   Bases are US-freelance reference prices (from 2026 market research);
+   COUNTRY_FACTOR scales them to each local market. Numbers cross-checked
+   against real quotes: BD business site ~$300-900, US ~$2-3k, etc.
+
+   SIMULATED vs REAL: Design & Functionality base scores come from a stable
+   hash of the URL (so a site always scores the same). In the LIVE version,
+   replace hashScan() with Google PageSpeed Insights (Lighthouse) called from
+   a serverless/PHP endpoint. Everything else is already real.
+   ========================================================================= */
+
+/* market factor vs US freelance = 1.00 (research-grounded, editable) */
+const COUNTRY_FACTOR = {
+  "United States":1.00,"Canada":0.90,"Australia":0.85,"United Kingdom":0.82,
+  "Ireland":0.78,"Germany":0.80,"Netherlands":0.80,"France":0.72,"Italy":0.62,
+  "Spain":0.58,"Portugal":0.50,"Poland":0.45,"Romania":0.40,"Ukraine":0.32,
+  "Turkey":0.28,"United Arab Emirates":0.55,"Saudi Arabia":0.50,
+  "Brazil":0.35,"Mexico":0.38,"Argentina":0.30,"Colombia":0.30,
+  "China":0.35,"Malaysia":0.30,"Thailand":0.28,"South Africa":0.30,
+  "Philippines":0.22,"Morocco":0.22,"Vietnam":0.20,"Indonesia":0.20,
+  "Egypt":0.18,"Nigeria":0.18,"Kenya":0.18,"India":0.17,"Sri Lanka":0.16,
+  "Bangladesh":0.16,"Nepal":0.15,"Pakistan":0.15,"Other / Global":0.35
+};
+
+/* site type -> US freelance reference base + pages typically included */
+const SITE_TYPE = {
+  "Landing page":      {base:900,  inc:1,  key:"landing"},
+  "Business / corporate":{base:2600,inc:6, key:"business"},
+  "Portfolio":         {base:1600, inc:5,  key:"portfolio"},
+  "Blog / content":    {base:2200, inc:8,  key:"blog"},
+  "E-commerce store":  {base:6000, inc:10, key:"ecom"},
+  "Web app / SaaS":    {base:11000,inc:8,  key:"webapp"}
+};
+const PAGE_VALUE = 120; // US$ per extra page
+
+const DESIGN_MULT = {"Fully custom":1.30,"Customised template":1.00,"Off-the-shelf template":0.75};
+
+/* functionality -> additive weight on funcMult */
+const FEATURES = {
+  "Contact / lead form":0.04,"Online booking":0.12,"Blog / CMS":0.05,
+  "Multilingual":0.12,"Payments / checkout":0.15,"User accounts / login":0.15,
+  "Search & filters":0.08,"Custom animations":0.07,"API integrations":0.14,
+  "Admin dashboard":0.15
+};
+
+const PLATFORM = {
+  "Custom-coded":{w:1.08,det:"hand-coded"},
+  "WordPress":{w:1.00,det:"WordPress"},
+  "Shopify":{w:1.00,det:"Shopify"},
+  "Webflow":{w:1.03,det:"Webflow"},
+  "Wix / Squarespace":{w:0.85,det:"site builder"},
+  "Framer":{w:1.00,det:"Framer"},
+  "Other":{w:1.00,det:"custom stack"}
+};
+
+const state = {
+  url:"", shot:null, type:"", platform:"", custom:"",
+  pages:null, feats:[], country:"Bangladesh", audience:"", client:"",
+  aiUsed:"", aiTools:[], aiPurposes:[]
+};
+
+const STEPS=["s-intro","s1","s2","s3","s4","s5"];
+let current=0;
+
+function go(i){
+  document.querySelectorAll("section.screen").forEach(s=>s.classList.remove("active"));
+  const id=typeof i==="number"?STEPS[i]:i;
+  document.getElementById(id).classList.add("active");
+  if(typeof i==="number")current=i;
+  const pct=[0,20,40,60,80,100][Math.min(current,5)];
+  document.getElementById("pfill").style.width=pct+"%";
+  const labels=["Appraisal desk","The specimen","What it is","Size & features","Origin & market","AI assistance"];
+  document.getElementById("steplabel").textContent=labels[current]||"Appraisal desk";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function singleChips(id,vals,key,cls){
+  const c=document.getElementById(id);c.innerHTML="";
+  vals.forEach(v=>{
+    const b=document.createElement("button");
+    b.className="chip"+(cls?" "+cls:"");
+    b.innerHTML='<span class="dot"></span>'+v;
+    b.onclick=()=>{state[key]=v;c.querySelectorAll(".chip").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");if(key==="aiUsed")toggleAIDetail(v);};
+    c.appendChild(b);
+  });
+}
+function multiChips(id,vals,arrKey,cls){
+  const c=document.getElementById(id);c.innerHTML="";
+  vals.forEach(v=>{
+    const b=document.createElement("button");
+    b.className="chip"+(cls?" "+cls:"");
+    b.innerHTML='<span class="dot"></span>'+v;
+    b.onclick=()=>{const a=state[arrKey];const i=a.indexOf(v);if(i>-1){a.splice(i,1);b.classList.remove("sel");}else{a.push(v);b.classList.add("sel");}};
+    c.appendChild(b);
+  });
+}
+
+singleChips("opt-type",Object.keys(SITE_TYPE),"type","teal");
+singleChips("opt-platform",Object.keys(PLATFORM),"platform");
+singleChips("opt-custom",Object.keys(DESIGN_MULT),"custom");
+multiChips("opt-feat",Object.keys(FEATURES),"feats");
+singleChips("opt-client",["A paying client","My own business","A friend / free","Portfolio / practice"],"client");
+singleChips("opt-aiused",["No AI","Yes, a little","Yes, heavily"],"aiUsed");
+multiChips("opt-aitools",["ChatGPT","Claude","Gemini","Midjourney","v0","Cursor","GitHub Copilot","Other"],"aiTools");
+multiChips("opt-aipurpose",["Writing code","Layout / design","Images / graphics","Copywriting","Debugging","Ideas / research"],"aiPurposes");
+
+/* country + target dropdowns */
+const csel=document.getElementById("country");
+Object.keys(COUNTRY_FACTOR).sort().forEach(c=>{
+  const o=document.createElement("option");o.value=c;o.textContent=c;
+  if(c==="Bangladesh")o.selected=true;csel.appendChild(o);
+});
+csel.onchange=e=>state.country=e.target.value;
+
+const asel=document.getElementById("audience");
+const ph=document.createElement("option");ph.value="";ph.textContent="— select the market it targets —";asel.appendChild(ph);
+Object.keys(COUNTRY_FACTOR).sort().forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;asel.appendChild(o);});
+asel.onchange=e=>state.audience=e.target.value;
+
+function toggleAIDetail(v){document.getElementById("ai-detail").classList.toggle("show",v!=="No AI");}
+
+const shot=document.getElementById("shot");
+shot.onchange=()=>{if(shot.files[0]){state.shot=shot.files[0].name;document.getElementById("uploadbox").classList.add("has");document.getElementById("uploadtext").innerHTML="<strong>&#10003; "+shot.files[0].name+"</strong><br>attached";}};
+
+/* validation */
+function validURL(u){try{const x=new URL(u);return x.protocol==="http:"||x.protocol==="https:";}catch(e){return false;}}
+function err(id,s){document.getElementById(id).classList.toggle("show",s);}
+function validate1(){const u=document.getElementById("url").value.trim();if(!validURL(u)){err("err-url",true);return;}err("err-url",false);state.url=u;go(2);}
+function validate2(){
+  let ok=true;
+  if(!state.type){err("err-type",true);ok=false;}else err("err-type",false);
+  if(!state.platform){err("err-platform",true);ok=false;}else err("err-platform",false);
+  if(!state.custom){err("err-custom",true);ok=false;}else err("err-custom",false);
+  if(ok)go(3);
+}
+function validate3(){const p=parseInt(document.getElementById("pages").value);if(!p||p<1){err("err-pages",true);return;}err("err-pages",false);state.pages=p;go(4);}
+
+/* ---------------- appraisal engine ---------------- */
+function hashScan(url){
+  let h=0;for(let i=0;i<url.length;i++){h=(h*31+url.charCodeAt(i))>>>0;}
+  const a=(h%1000)/1000,b=((h>>>10)%1000)/1000;
+  return {baseDesign:58+Math.round(a*34), baseFunction:55+Math.round(b*36)};
+}
+function niceRound(v){
+  if(v>=2000)return Math.round(v/100)*100;
+  if(v>=500)return Math.round(v/50)*50;
+  if(v>=100)return Math.round(v/10)*10;
+  return Math.max(20,Math.round(v/5)*5);
+}
+function grade(o){if(o>=90)return"A";if(o>=85)return"A-";if(o>=80)return"B+";if(o>=75)return"B";if(o>=70)return"B-";if(o>=63)return"C+";if(o>=55)return"C";return"C-";}
+
+function computeResults(){
+  const scan=hashScan(state.url);
+  const T=SITE_TYPE[state.type]||SITE_TYPE["Business / corporate"];
+  const plat=PLATFORM[state.platform]||PLATFORM["Other"];
+  const dMult=DESIGN_MULT[state.custom]||1.0;
+
+  // custom bonus for scores
+  let customB = state.custom==="Fully custom"?8 : state.custom==="Customised template"?2 : -6;
+
+  // functionality multiplier
+  let funcAdd=0; state.feats.forEach(f=>funcAdd+=(FEATURES[f]||0));
+  const funcMult=Math.min(1.85, 1+funcAdd);
+
+  // scores
+  const design=Math.max(30,Math.min(98, scan.baseDesign+customB));
+  const func  =Math.max(30,Math.min(98, scan.baseFunction+state.feats.length*4+(T.key==="ecom"||T.key==="webapp"?6:0)));
+  const extraPages=Math.max(0,(state.pages||T.inc)-T.inc);
+  const scopeBase=(T.key==="ecom"||T.key==="webapp")?10:0;
+  const effort=Math.max(35,Math.min(97, Math.round(45+extraPages*1.5+state.feats.length*5+customB+scopeBase)));
+  const overall=Math.round(design*0.4+func*0.32+effort*0.28);
+
+  // quality multiplier from design score
+  const qualityMult=0.80+(design/100)*0.45;
+
+  // AI factor (mild)
+  const aiMult=state.aiUsed==="Yes, heavily"?0.90 : state.aiUsed==="Yes, a little"?0.97 : 1.0;
+
+  // core US value, then scale per market
+  const valueUS=(T.base+extraPages*PAGE_VALUE)*dMult*funcMult*qualityMult*plat.w*aiMult;
+
+  const f=COUNTRY_FACTOR[state.country]||COUNTRY_FACTOR["Other / Global"];
+  const mid=niceRound(valueUS*f);
+  const low=niceRound(valueUS*f*0.85);
+  const high=niceRound(valueUS*f*1.20);
+  const usa=niceRound(valueUS*1.0);
+
+  const audC=(state.audience&&COUNTRY_FACTOR[state.audience])?state.audience:null;
+  const audMid=audC?niceRound(valueUS*COUNTRY_FACTOR[audC]):null;
+
+  return {design,func,effort,overall,grade:grade(overall),
+          mid,low,high,usa,audC,audMid,valueUS,
+          T,plat,dMult,funcMult,extraPages,aiMult};
+}
+
+/* scanning animation */
+function startScan(){
+  go("s-scan");document.getElementById("pfill").style.width="100%";
+  const T=SITE_TYPE[state.type]||{key:""};
+  const platDet=(PLATFORM[state.platform]||{det:"the stack"}).det;
+  const lines=[
+    "Fetching markup&hellip;",
+    "Detecting platform &rarr; "+platDet,
+    "Reading layout &amp; responsiveness&hellip;",
+    "Scoring design &amp; functionality&hellip;",
+    "Pricing a "+state.type.toLowerCase()+" for the "+state.country+" market&hellip;",
+    "Sealing the certificate&hellip;"
+  ];
+  const log=document.getElementById("scanlog");let i=0;
+  const tick=()=>{
+    if(i>0)log.innerHTML='<span class="done">&#10003; '+lines[i-1]+'</span>';
+    if(i<lines.length){setTimeout(()=>{log.innerHTML=lines[i];i++;setTimeout(tick,520);},120);}
+    else{setTimeout(showResults,400);}
+  };
+  tick();
+}
+
+let R=null;
+function showResults(){
+  R=computeResults();go("s-result");
+  document.getElementById("pfill").style.width="100%";
+  document.getElementById("steplabel").textContent="Verdict";
+
+  document.getElementById("r-site").textContent=state.url;
+  document.getElementById("r-range").textContent="range $"+R.low.toLocaleString()+" – $"+R.high.toLocaleString();
+  document.getElementById("r-headline").textContent="Grade "+R.grade+" &middot; appraised";
+  document.getElementById("r-headline").innerHTML="Grade "+R.grade+" &middot; appraised";
+
+  const approach=state.custom==="Fully custom"?"custom":state.custom==="Customised template"?"customised":"template";
+  document.getElementById("r-caption").innerHTML=
+    "A "+approach+" "+state.type.toLowerCase()+" on "+R.plat.det+", "+state.pages+" pages. A designer in <b>"+state.country+"</b> should be paid around <b>$"+R.mid.toLocaleString()+"</b> &mdash; the local going rate for this scope and quality.";
+
+  // markets
+  const mk=document.getElementById("r-markets");
+  const mrows=[{c:state.country,n:"designer's home market",v:R.mid,cls:"primary",badge:"you should get"}];
+  if(state.country!=="United States")mrows.push({c:"United States",n:"US market rate",v:R.usa,cls:"us"});
+  if(R.audC&&R.audC!==state.country&&R.audC!=="United States")mrows.push({c:R.audC,n:"market the site was built for",v:R.audMid,cls:""});
+  mk.innerHTML=mrows.map(r=>'<div class="mrow '+r.cls+'"><div class="who"><span class="c">'+r.c+(r.badge?'<span class="badge">'+r.badge+'</span>':'')+'</span><span class="n">'+r.n+'</span></div><span class="amt">$'+r.v.toLocaleString()+'</span></div>').join("");
+
+  countUp("r-price",R.mid);
+  setScore("r-design","m-design",R.design);
+  setScore("r-func","m-func",R.func);
+  setScore("r-effort","m-effort",R.effort);
+  document.getElementById("r-grade").textContent="Overall grade "+R.grade+" &middot; "+R.overall+"/100";
+  document.getElementById("r-grade").innerHTML="Overall grade "+R.grade+" &middot; "+R.overall+"/100";
+
+  const bd=document.getElementById("r-breakdown");bd.innerHTML="";
+  const featTxt=state.feats.length?state.feats.length+" features":"none";
+  [["Site type",state.type],["Design approach",state.custom],["Pages",state.pages],
+   ["Functionality",featTxt],["Platform",state.platform],["Built for",state.client||"—"]]
+   .forEach(r=>{bd.innerHTML+='<div class="brow"><span class="k">'+r[0]+'</span><span class="v">'+r[1]+'</span></div>';});
+
+  const note=document.getElementById("r-ainote");
+  if(state.aiUsed&&state.aiUsed!=="No AI"){
+    note.style.display="block";
+    const tools=state.aiTools.length?state.aiTools.join(", "):"AI tools";
+    const purp=state.aiPurposes.length?state.aiPurposes.join(", ").toLowerCase():"assistance";
+    const trim=Math.round((1-R.aiMult)*100);
+    note.innerHTML="<b>AI-assisted.</b> Used "+tools+" for "+purp+". Price trimmed ~"+trim+"% to reflect the assist &mdash; noted for transparency, not penalty.";
+  }else note.style.display="none";
+
+  document.getElementById("r-disclaimer").innerHTML=
+    "Experimental estimate. Prices are fixed-project benchmarks built from 2026 market research (freelance/independent rates, not agency). Design &amp; functionality here come from a simulated scan plus your answers; the live version reads real Lighthouse/PageSpeed scores. This is guidance, not a formal appraisal or a wage guarantee.";
+}
+
+function setScore(numId,meterId,val){
+  const el=document.getElementById(numId);let n=0;const step=Math.max(1,Math.round(val/28));
+  const t=setInterval(()=>{n+=step;if(n>=val){n=val;clearInterval(t);}el.textContent=n;},22);
+  setTimeout(()=>{document.getElementById(meterId).style.width=val+"%";},120);
+}
+function countUp(id,target){
+  const el=document.getElementById(id);let n=0;const step=Math.max(5,Math.round(target/40));
+  const t=setInterval(()=>{n+=step;if(n>=target){n=target;clearInterval(t);}el.textContent=n.toLocaleString();},20);
+}
+
+/* share */
+function shareText(){return "My website design just got appraised on PriceMyWeb — Grade "+R.grade+", valued at $"+R.mid.toLocaleString()+" for the "+state.country+" market. Design "+R.design+" · Function "+R.func+" · Scope "+R.effort+". pricemyweb.com";}
+function share(net){
+  const url=encodeURIComponent(window.location.href),txt=encodeURIComponent(shareText());let link="";
+  if(net==="facebook")link="https://www.facebook.com/sharer/sharer.php?u="+url+"&quote="+txt;
+  else if(net==="x")link="https://twitter.com/intent/tweet?text="+txt+"&url="+url;
+  else if(net==="linkedin")link="https://www.linkedin.com/sharing/share-offset?url="+url;
+  else if(net==="instagram"){copyCaption();alert("Instagram has no web share link — your caption + link are copied. Paste them with your certificate image in the app.");return;}
+  const w=window.open(link,"_blank","noopener,width=640,height=580");
+  if(!w||w.closed||typeof w.closed==="undefined"){
+    copyCaption();
+    alert("Your browser blocked the share popup (this happens inside the in-chat preview). The post text + link are copied to your clipboard.\n\nOn your live site the button opens "+net.charAt(0).toUpperCase()+net.slice(1)+" directly.");
+  }
+}
+function copyCaption(){try{if(navigator.clipboard)navigator.clipboard.writeText(shareText()+" "+window.location.href);}catch(e){}}
+
+/* PDF certificate */
+function downloadPDF(){
+  if(!window.jspdf||!window.jspdf.jsPDF){
+    alert("The certificate library didn't load (can happen in the in-chat preview or when offline). Open this page on your website — or save the .html and open it in a browser — and the download will work.");
+    return;
+  }
+  try{
+  const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:"pt",format:"a4"});const W=595,cx=W/2;
+  doc.setDrawColor(198,154,62);doc.setLineWidth(2);doc.rect(30,30,W-60,782-60);
+  doc.setLineWidth(0.6);doc.rect(38,38,W-76,782-76);
+  doc.setTextColor(22,24,29);doc.setFont("courier","bold");doc.setFontSize(11);doc.text("PRICEMYWEB",cx,86,{align:"center"});
+  doc.setFont("helvetica","normal");doc.setFontSize(10);doc.setTextColor(120,118,110);doc.text("CERTIFICATE OF DESIGN APPRAISAL",cx,104,{align:"center"});
+  doc.setDrawColor(220,216,205);doc.setLineWidth(0.6);doc.line(90,120,W-90,120);
+  doc.setTextColor(22,24,29);doc.setFont("helvetica","normal");doc.setFontSize(11);doc.text("Appraised website",cx,150,{align:"center"});
+  doc.setFont("courier","bold");doc.setFontSize(13);doc.text(state.url.replace(/^https?:\/\//,""),cx,168,{align:"center",maxWidth:W-140});
+  doc.setFillColor(22,24,29);doc.roundedRect(cx-150,200,300,110,10,10,"F");
+  doc.setTextColor(228,176,74);doc.setFont("courier","bold");doc.setFontSize(11);doc.text("FAIR PROJECT PRICE",cx,228,{align:"center"});
+  doc.setFontSize(38);doc.text("$"+R.mid.toLocaleString(),cx,272,{align:"center"});
+  doc.setFontSize(9);doc.setTextColor(185,180,166);doc.text("range $"+R.low.toLocaleString()+" - $"+R.high.toLocaleString()+"  |  "+state.country+" market",cx,294,{align:"center"});
+  doc.setTextColor(22,24,29);doc.setFont("courier","bold");doc.setFontSize(30);doc.text("GRADE  "+R.grade,cx,352,{align:"center"});
+  doc.setFont("helvetica","normal");doc.setFontSize(10);doc.setTextColor(120,118,110);doc.text("Overall "+R.overall+" / 100",cx,370,{align:"center"});
+  const sy=430,cols=[["DESIGN",R.design],["FUNCTIONALITY",R.func],["SCOPE",R.effort]];
+  cols.forEach((c,i)=>{const x=cx+(i-1)*150;doc.setFont("courier","bold");doc.setFontSize(26);doc.setTextColor(31,111,107);doc.text(String(c[1]),x,sy,{align:"center"});doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(120,118,110);doc.text(c[0],x,sy+16,{align:"center"});});
+  let dy=500;doc.setDrawColor(220,216,205);doc.line(90,dy-16,W-90,dy-16);doc.setFontSize(10);
+  const det=[["Site type",state.type],["Design approach",state.custom],["Pages",String(state.pages)],
+    ["Features",state.feats.length?state.feats.join(", "):"none"],["Platform",state.platform],
+    ["AI assistance",(state.aiUsed&&state.aiUsed!=="No AI")?(state.aiUsed+" ("+(state.aiTools.join(", ")||"—")+")"):"None"],
+    [state.country+" market (home)","$"+R.mid.toLocaleString()],["United States market","$"+R.usa.toLocaleString()]];
+  if(R.audC&&R.audC!==state.country&&R.audC!=="United States")det.push([R.audC+" market (built for)","$"+R.audMid.toLocaleString()]);
+  det.forEach(r=>{doc.setTextColor(120,118,110);doc.setFont("helvetica","normal");doc.text(r[0],100,dy);doc.setTextColor(22,24,29);doc.setFont("courier","normal");doc.text(String(r[1]),W-100,dy,{align:"right",maxWidth:300});dy+=22;});
+  doc.setDrawColor(198,154,62);doc.setLineWidth(1.5);doc.circle(cx,dy+34,32,"S");
+  doc.setFontSize(7.5);doc.setTextColor(198,154,62);doc.setFont("courier","bold");doc.text("APPRAISED",cx,dy+32,{align:"center"});
+  doc.text(new Date().toISOString().slice(0,10),cx,dy+44,{align:"center"});
+  doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(150,148,140);doc.text("PriceMyWeb by Tasin Abrar - pricemyweb.com - experimental estimate, not a formal appraisal or wage guarantee.",cx,762,{align:"center"});
+  // robust download: blob + temporary anchor appended to the DOM (works across browsers when hosted)
+  const blob=doc.output("blob");
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download="whats-the-price-certificate.pdf";a.style.display="none";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},1500);
+  }catch(err){
+    alert("Couldn't generate the certificate: "+err.message+"\n\nNote: downloads are blocked inside the in-chat preview — open this page on your website (or save the .html and open it in a browser) and it will download.");
+  }
+}
+
+function restart(){
+  Object.assign(state,{url:"",shot:null,type:"",platform:"",custom:"",pages:null,feats:[],country:"Bangladesh",audience:"",client:"",aiUsed:"",aiTools:[],aiPurposes:[]});
+  document.getElementById("url").value="";document.getElementById("pages").value="";
+  document.getElementById("uploadbox").classList.remove("has");
+  document.getElementById("uploadtext").innerHTML="<strong>Drop or choose an image</strong><br>PNG or JPG of the homepage";
+  document.querySelectorAll(".chip.sel").forEach(c=>c.classList.remove("sel"));
+  document.getElementById("ai-detail").classList.remove("show");
+  csel.value="Bangladesh";asel.value="";
+  go(0);
+}
+</script>
+</body>
+</html>
