@@ -519,7 +519,7 @@ const PLATFORM = {
 };
 
 const state = {
-  url:"", shot:null, shotAnalysis:null, type:"", platform:"", custom:"",
+  url:"", shot:null, shotAnalysis:null, urlScan:null, type:"", platform:"", custom:"",
   pages:null, feats:[], buildNotes:"", stack:[], country:"Bangladesh", audience:"", client:"",
   aiUsed:"", aiTools:[], aiPurposes:[]
 };
@@ -738,10 +738,36 @@ function computeResults(){
   }else{
     design=Math.max(30,Math.min(98, scan.baseDesign+customB));
   }
-  const func  =Math.max(30,Math.min(98, scan.baseFunction+state.feats.length*4+(T.key==="ecom"||T.key==="webapp"?6:0)));
+  let func  =Math.max(30,Math.min(98, scan.baseFunction+state.feats.length*4+(T.key==="ecom"||T.key==="webapp"?6:0)));
   const extraPages=Math.max(0,(state.pages||T.inc)-T.inc);
   const scopeBase=(T.key==="ecom"||T.key==="webapp")?10:0;
-  const effort=Math.max(35,Math.min(97, Math.round(45+extraPages*1.5+state.feats.length*5+customB+scopeBase)));
+  let effort=Math.max(35,Math.min(97, Math.round(45+extraPages*1.5+state.feats.length*5+customB+scopeBase)));
+
+  // ---- real signals from the live-page scan (if it succeeded) ----
+  const us=state.urlScan;
+  let detectedPlatform=null, detectedTech=[], scanMult=1.0;
+  if(us && us.ok){
+    detectedPlatform = (us.platform && us.platform!=="Unknown") ? us.platform : null;
+    detectedTech = us.frameworks || [];
+    // functionality: real forms/inputs/scripts + good hygiene
+    let fnB=0;
+    fnB += Math.min(6,(us.counts.forms||0)*2);
+    fnB += (us.counts.inputs>6?4:0);
+    fnB += (us.responsive?3:0) + (us.https?2:0) + (us.seo.hasOpenGraph?2:0);
+    func = Math.min(98, func + fnB);
+    // design: only lean on markup hygiene when there's no screenshot to judge visuals
+    if(!state.shotAnalysis){
+      let dB=0;
+      dB += us.responsive?4:0;
+      dB += us.fonts?3:0;
+      dB += us.themeColor?2:0;
+      dB += (us.seo.hasTitle && us.seo.hasDescription)?2:0;
+      design = Math.min(96, design + dB);
+    }
+    // scope + value: detected modern frameworks signal a heavier build
+    effort = Math.min(99, effort + Math.min(6, detectedTech.length*2));
+    scanMult = detectedTech.length ? Math.min(1.10, 1+0.02*detectedTech.length) : 1.0;
+  }
   const overall=Math.round(design*0.4+func*0.32+effort*0.28);
 
   // quality multiplier from design score
@@ -757,7 +783,7 @@ function computeResults(){
   const stackMult = state.stack.length ? Math.min(1.14, 1+0.012*state.stack.length) : 1.0;
 
   // core US value, then scale per market
-  const valueUS=(T.base+extraPages*PAGE_VALUE)*dMult*funcMult*qualityMult*plat.w*aiMult*cx.mult*stackMult;
+  const valueUS=(T.base+extraPages*PAGE_VALUE)*dMult*funcMult*qualityMult*plat.w*aiMult*cx.mult*stackMult*scanMult;
 
   const f=COUNTRY_FACTOR[state.country]||COUNTRY_FACTOR["Other / Global"];
   const mid=niceRound(valueUS*f);
@@ -774,7 +800,7 @@ function computeResults(){
   return {design,func,effort:effortAdj,overall:Math.round(design*0.4+func*0.32+effortAdj*0.28),
           grade:grade(Math.round(design*0.4+func*0.32+effortAdj*0.28)),
           mid,low,high,usa,audC,audMid,valueUS,
-          T,plat,dMult,funcMult,extraPages,aiMult,cx};
+          T,plat,dMult,funcMult,extraPages,aiMult,cx,detectedPlatform,detectedTech};
 }
 
 /* Reads the free-text build description and returns a complexity multiplier.
@@ -797,13 +823,24 @@ function analyzeBuildNotes(text){
 }
 
 /* scanning animation */
+function performUrlScan(){
+  state.urlScan=null;
+  var ctrl=("AbortController" in window)?new AbortController():null;
+  var to=ctrl?setTimeout(function(){try{ctrl.abort();}catch(e){}},11000):null;
+  return fetch("/api/scan?url="+encodeURIComponent(state.url), ctrl?{signal:ctrl.signal}:{})
+    .then(function(r){return r.json();})
+    .then(function(d){ if(d&&d.ok){ state.urlScan=d; } })
+    .catch(function(){})
+    .then(function(){ if(to)clearTimeout(to); });
+}
 function startScan(){
   go("s-scan");document.getElementById("pfill").style.width="100%";
+  const scanDone=performUrlScan();       // real live-page read, runs in parallel
   const T=SITE_TYPE[state.type]||{key:""};
   const platDet=(PLATFORM[state.platform]||{det:"the stack"}).det;
   const lines=[
-    "Fetching markup&hellip;",
-    "Detecting platform &rarr; "+platDet,
+    "Fetching the live page&hellip;",
+    "Detecting platform &amp; frameworks&hellip;",
     "Reading layout &amp; responsiveness&hellip;",
     "Scoring design &amp; functionality&hellip;",
     "Pricing a "+state.type.toLowerCase()+" for the "+state.country+" market&hellip;",
@@ -813,7 +850,7 @@ function startScan(){
   const tick=()=>{
     if(i>0)log.innerHTML='<span class="done">&#10003; '+lines[i-1]+'</span>';
     if(i<lines.length){setTimeout(()=>{log.innerHTML=lines[i];i++;setTimeout(tick,520);},120);}
-    else{setTimeout(showResults,400);}
+    else{ scanDone.then(function(){ setTimeout(showResults,300); }); }  // wait for the real scan to settle
   };
   tick();
 }
@@ -854,6 +891,9 @@ function showResults(){
     pal.style.display="flex";
     pal.innerHTML=state.shotAnalysis.palette.map(function(hx){return '<span class="sw" style="background:'+hx+'" title="'+hx+'"></span>';}).join("");
     src.textContent="Design read from your screenshot — colour "+state.shotAnalysis.colorScore+"/100, "+state.shotAnalysis.harmony+" palette, "+state.shotAnalysis.contrast+"% contrast.";
+  }else if(state.urlScan && state.urlScan.ok){
+    pal.style.display="none";pal.innerHTML="";
+    src.textContent="Read from your live page — platform, structure and hygiene detected. Upload a screenshot for a visual colour read too.";
   }else{
     pal.style.display="none";pal.innerHTML="";
     src.textContent="Design estimated from your answers. Upload a screenshot next time for a sharper, colour-based read.";
@@ -864,6 +904,8 @@ function showResults(){
   var rows=[["Site type",state.type],["Design approach",state.custom],["Pages",state.pages],
    ["Functionality",featTxt],["Build complexity",R.cx.level],["Platform",state.platform],["Built for",state.client||"—"]];
   if(state.stack.length) rows.splice(6,0,["Tech stack",state.stack.join(", ")]);
+  if(R.detectedPlatform) rows.push(["Detected on site",R.detectedPlatform]);
+  if(R.detectedTech && R.detectedTech.length) rows.push(["Detected tech",R.detectedTech.join(", ")]);
   rows.forEach(r=>{bd.innerHTML+='<div class="brow"><span class="k">'+r[0]+'</span><span class="v">'+r[1]+'</span></div>';});
 
   const note=document.getElementById("r-ainote");
@@ -959,7 +1001,7 @@ function downloadPDF(){
 }
 
 function restart(){
-  Object.assign(state,{url:"",shot:null,shotAnalysis:null,type:"",platform:"",custom:"",pages:null,feats:[],buildNotes:"",stack:[],country:"Bangladesh",audience:"",client:"",aiUsed:"",aiTools:[],aiPurposes:[]});
+  Object.assign(state,{url:"",shot:null,shotAnalysis:null,urlScan:null,type:"",platform:"",custom:"",pages:null,feats:[],buildNotes:"",stack:[],country:"Bangladesh",audience:"",client:"",aiUsed:"",aiTools:[],aiPurposes:[]});
   document.getElementById("url").value="";document.getElementById("pages").value="";
   var bn=document.getElementById("buildnotes");if(bn)bn.value="";
   var sd=document.getElementById("stack-detail");if(sd)sd.classList.remove("show");
